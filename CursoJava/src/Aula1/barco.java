@@ -5,11 +5,13 @@ public class barco {
 	int vidaCheia;
 	int vidaAtual;
 	int barcosVivos = 5;
+	int tamanho;
 	
 	public barco(String descricao, int tamanho){
 		descricaoBarco = descricao;
 		vidaCheia = tamanho;
 		vidaAtual = tamanho;
+		this.tamanho = tamanho;
 	}
 	
 	public void decreaseVida(String barco) {
@@ -26,19 +28,15 @@ public class barco {
 	}
 	
 	public int returnTamanho(String barco){
-		int tamanho = 0;
-		switch (barco){
-		case "PA": tamanho = 5;
-		case "EN": tamanho = 4;
-		case "SB": tamanho = 3;
-		case "DT": tamanho = 3;
-		case "BP": tamanho = 2;
-		}
 		return tamanho;
 	}
 
 	public int returnVidaAtual(){
 		return vidaAtual;
+	}
+	
+	public String descricaoBarco(){
+		return descricaoBarco;
 	}
 	
 	

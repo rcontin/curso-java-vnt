@@ -1,4 +1,31 @@
-// test commit
+/* ---------------------------------------------------------
+ * Desafio: BATALHA NAVAL
+ * ---------------------------------------------------------
+ *  Cada jogador deve dispor de uma área de 10x10 onde ele vai posicionar 
+ *  5 navios de tamanhos diferentes: 
+ *  um porta-aviões (comprimento 5), 
+ *  um encouraçado (comprimento 4), 
+ *  um submarino e um destroyer (ambom de comprimento 3), 
+ *  e um barco de patrulha (comprimento 2). 
+ *  Um jogador nunca deve saber a posição dos navios do oponente. Os navios de 
+ *  um mesmo jogador não podem se cruzar e devem estar dentro das fronteiras da
+ *  sua área disponível.
+ *	Depois que todas as peças estão posicionadas, os jogadores se alternam em turnos 
+ *  para lançar bombas sobre o outro oponente especificando qual posição ele deseja 
+ *  atacar. Se algum dos navios do jogador que está sendo atacado estiver na posição 
+ *  atacada, considera-se que o navio foi atingido. O ataque falha se o atacante lançar
+ *  uma bomba em um local onde não existe nenhum navio do oponente.
+ *	Caso todos as posições de um navio for atingida, o jogador atacado deve informar o 
+ *  oponente qual dos seus navios afundou. O jogo continua até que um jogador afunde 
+ *  todos os navios de seu oponente; este jogador é então considerado vencedor.
+ *	Você deve desenvolver um programa que jogue uma partida de batalha naval entre 
+ *  dois oponentes. Você precisa:
+ *	Definir uma maneira de indicar o estado inicial dos navios dos jogadores;
+ *	Exibir todos os movimentos dos jogadores, informando se os ataques foram bem 
+ *  sucedidos ou não;
+ *	Informar quando um navio é atingido e quando ele é afundado;
+ *	Exibir ao final do jogo um mapa final do posicionamento final dos navios dos jogadores.
+ */
 
 package Aula1;
 
@@ -8,19 +35,18 @@ public class Desafio_BatalhaNaval {
 	static Scanner entrada = new Scanner (System.in);
 	static String[][] t1 = new String[10][10];
 	static String[][] t2 = new String[10][10];
-	static barco barcoPA1 = new barco("PA", 5);
-	static barco barcoEN1 = new barco("EN", 4);
-	static barco barcoSB1 = new barco("SB", 3);
-	static barco barcoDT1 = new barco("DT", 3);
-	static barco barcoBP1 = new barco("BP", 2);
-	static barco barcoPA2 = new barco("PA", 5);
-	static barco barcoEN2 = new barco("EN", 4);
-	static barco barcoSB2 = new barco("SB", 3);
-	static barco barcoDT2 = new barco("DT", 3);
-	static barco barcoBP2 = new barco("BP", 2);
+	static barco barcoPA1 = new barco("PA", 1);
+	static barco barcoEN1 = new barco("EN", 1);
+	static barco barcoSB1 = new barco("SB", 1);
+	static barco barcoDT1 = new barco("DT", 1);
+	static barco barcoBP1 = new barco("BP", 1);
+	static barco barcoPA2 = new barco("PA", 1);
+	static barco barcoEN2 = new barco("EN", 1);
+	static barco barcoSB2 = new barco("SB", 1);
+	static barco barcoDT2 = new barco("DT", 1);
+	static barco barcoBP2 = new barco("BP", 1);
 	
-	
-	
+		
 	public static String[][] escolherTabuleiro(int jogador) {
 		if (jogador == 1)
 			return t1;
@@ -30,7 +56,33 @@ public class Desafio_BatalhaNaval {
 			return null;
 	}
 	
-	public static void posicionarNavio(int jogador, String descricao, int tamanho){			
+	
+	public static int getLinha(){			
+		System.out.println("Qual linha deseja posicionar? ");
+		int linha = entrada.nextInt();	
+		return linha;
+	}
+
+	
+	public static int getColuna(){			
+		System.out.println("Qual coluna deseja posicionar? ");
+		int coluna = entrada.nextInt();	
+		return coluna;
+	}
+	
+	
+	public static String getDirecao(){			
+		System.out.println("Deseja que ele fique na horizontal ou vertical?"
+				+ " (Digite V para vertical ou H para horizontal): ");
+		String direcao = entrada.next();
+		return direcao;
+	}
+	
+	
+	public static void posicionarNavio(int jogador, barco barcoo ){	
+		String descricao = barcoo.descricaoBarco();
+		int tamanho = barcoo.returnTamanho(descricao);
+		
 		System.out.println("Jogador " + jogador + ",\n"
 				+ "Posicione seu " + descricao + " com tamanho " + tamanho + "...");
 
@@ -43,28 +95,7 @@ public class Desafio_BatalhaNaval {
 		Desafio_BatalhaNaval.adicionaNavioNoTabuleiro(jogador, linha, coluna, direcao, tamanho, descricao);
 	}
 	
-	public static int getLinha(){			
-		System.out.println("Qual linha deseja posicionar? ");
-		int linha = entrada.nextInt();	
-			
-		return linha;
-	}
-	
-	public static int getColuna(){			
-		System.out.println("Qual coluna deseja posicionar? ");
-		int coluna = entrada.nextInt();	
-			
-		return coluna;
-	}
-	
-	public static String getDirecao(){			
-		System.out.println("Deseja que ele fique na horizontal ou vertical?"
-				+ " (Digite V para vertical ou H para horizontal): ");
-		String direcao = entrada.next();
-			
-		return direcao;
-	}
-	
+		
 	public static void adicionaNavioNoTabuleiro(int jogador, int linha, int coluna, String direcao, int tamanho, String peca){
 		String[][] tabuleiro = escolherTabuleiro(jogador);
 
@@ -99,9 +130,9 @@ public class Desafio_BatalhaNaval {
 			System.out.println("Direcao nao reconhecida!");
 		}
 	}
-		
+	
+	
 	public static void montarTabuleiro(String value[][]) {	
-		
 		for (int linha = 0; linha <= 9; linha++) {
 			for (int coluna = 0; coluna <= 9; coluna++) {
 				if (value[linha][coluna] == null)
@@ -117,166 +148,173 @@ public class Desafio_BatalhaNaval {
 	}
 	
 	
+	public static boolean checaFimDoJogo(int jogador) {
+		if (jogador == 1) {
+			 if ((barcoPA2.returnVidaAtual() == 0) && (barcoEN2.returnVidaAtual() == 0)
+				 && (barcoSB2.returnVidaAtual() == 0) && (barcoDT2.returnVidaAtual() == 0) &&
+			 	(barcoBP2.returnVidaAtual() == 0)) {
+					 return true;
+				}
+			 else 
+				 return false;
+		}
+		if (jogador == 2) {
+			 if ((barcoPA1.returnVidaAtual() == 0) && (barcoEN1.returnVidaAtual() == 0)
+				 && (barcoSB1.returnVidaAtual() == 0) && (barcoDT1.returnVidaAtual() == 0) &&
+				(barcoBP1.returnVidaAtual() == 0)) {
+					 return true;
+					 }
+			 else
+				 return false;
+		 }
+		else 
+			return false;
+	}
+
+
+	public static boolean checarAtaque(int jogador, int linhaAtaque, int colunaAtaque) {
+		String[][] tabuleiro = new String[10][10];
+		boolean ataqueResult = false;
+
+		tabuleiro = escolherTabuleiro(jogador);
 	
-	public void atacar(){
-		
+		if (jogador == 1) {
+			switch (tabuleiro[linhaAtaque][colunaAtaque]) {
+				case "PA": 
+						(barcoPA1).decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+						ataqueResult = true;
+						break;
+						
+					case "EN": 
+						barcoEN1.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+						ataqueResult = true;
+						break;
+						
+					case "SB": 
+						barcoSB1.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+						ataqueResult = true;
+						break;
+						
+					case "DT": 
+						barcoDT1.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+						ataqueResult = true;
+						break;
+						
+					case "BP": 
+						barcoBP1.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+						ataqueResult = true;
+						break;
+						
+					case "--":
+						System.out.println("Você errou!");
+						ataqueResult = false;
+						break;
+			}
+			tabuleiro[linhaAtaque][colunaAtaque] = "--";
+			montarTabuleiro(tabuleiro);
+		}
+		if (jogador == 2) {
+			switch (tabuleiro[linhaAtaque][colunaAtaque]) {
+			case "PA": 
+					barcoPA2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+					ataqueResult = true;
+					break;
+					
+				case "EN": 
+					barcoEN2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+					ataqueResult = true;
+					break;
+					
+				case "SB": 
+					barcoSB2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+					ataqueResult = true;
+					break;
+					
+				case "DT": 
+					barcoDT2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+					ataqueResult = true;
+					break;
+					
+				case "BP": 
+					barcoBP2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
+					ataqueResult = true;
+					break;
+					
+				case "--":
+					System.out.println("Você errou!");
+					ataqueResult = false;
+					break;
+		}
+		tabuleiro[linhaAtaque][colunaAtaque] = "--";
+		montarTabuleiro(tabuleiro);
+	}
+		return ataqueResult;	
 		
 	}
-	
-	public void checarDano(int linha, int coluna){
-		
-	}
-	
-	
+
+ 
 
 
 	public static void main(String[] args) {
-		String descricaoPA = new String("PA"); // PortaAvioes
-		int tamanhoPortaAvioes = 5;
-		String descricaoEN = new String("EN"); // Encouraçado
-		int tamanhoEncouracado = 4;
-		String descricaoSB = new String("SB"); // Submarino
-		int tamanhoSubmarino = 3; 
-		String descricaoDT = new String("DT"); // Destroyer
-		int tamanhoDestroyer = 3;
-		String descricaoBP = new String("BP"); // BarcoPatrulha
-		int tamanhoBarcoDePatrulha = 2;
-		
+		int[] movimentoLinhasJogador1 = new int[10];
+		int[] movimentoColunasJogador1 = new int[10];
+		boolean[] movimentoResultJogador1 = new boolean[10];
 		int jogador;
+		boolean fimDoJogo = false;
+		int count1 = 0;
 		
-		for (jogador = 1; jogador <= 2; jogador++) {
-			posicionarNavio(jogador, descricaoPA, tamanhoPortaAvioes);
-			//posicionarNavio(jogador, descricaoEN, tamanhoEncouracado);
-			//posicionarNavio(jogador, descricaoSB, tamanhoSubmarino);
-			//posicionarNavio(jogador, descricaoDT, tamanhoDestroyer);
-			//posicionarNavio(jogador, descricaoBP, tamanhoBarcoDePatrulha);
-		}
+		
+		jogador = 1;
+		posicionarNavio(jogador, barcoPA1); // Cria um Porta-Aviões para o Jogador 1
+		posicionarNavio(jogador, barcoEN1); // Cria um Porta-Aviões para o Jogador 1
+		posicionarNavio(jogador, barcoSB1); // Cria um Porta-Aviões para o Jogador 1
+		posicionarNavio(jogador, barcoDT1); // Cria um Porta-Aviões para o Jogador 1
+		posicionarNavio(jogador, barcoBP1); // Cria um Porta-Aviões para o Jogador 1
+		
+		jogador = 2;
+		posicionarNavio(jogador, barcoPA2);
+		posicionarNavio(jogador, barcoEN2);
+		posicionarNavio(jogador, barcoSB2);
+		posicionarNavio(jogador, barcoDT2);
+		posicionarNavio(jogador, barcoBP2);
+		
 		
 		do {
 			System.out.println("Jogador 1, entre com a linha e coluna de ataque:");
 			System.out.println("linhaAtaque: ");
 			int linhaAtaque = entrada.nextInt();	
+			movimentoLinhasJogador1[count1] = linhaAtaque;
 			System.out.println("linhaAtaque: ");
 			int colunaAtaque = entrada.nextInt();
-			int tabuleiro = 2;
+			movimentoColunasJogador1[count1] = colunaAtaque;
 			
-			checarAtaque(tabuleiro, linhaAtaque, colunaAtaque);
+			int tabuleiro = 2; // jogador 1 ataca no tabuleiro 2
+			
+			movimentoResultJogador1[count1] = checarAtaque(tabuleiro, linhaAtaque, colunaAtaque);
+			count1++;
 			
 			if (checaFimDoJogo(1) == true) {
 				System.out.println("Jogo acabou");
-			}
-			
-			else {
-				
+				fimDoJogo = true;
+				for (int i = 0; i < 10 ; i++)
+					System.out.println("Movimentos: " + movimentoLinhasJogador1[i] + movimentoColunasJogador1[i] + movimentoResultJogador1[i]);
+			}		
+			else {	
 				System.out.println("Jogador 2, entre com a linha e coluna de ataque:");
 				System.out.println("linhaAtaque: ");
 				linhaAtaque = entrada.nextInt();	
 				System.out.println("linhaAtaque: ");
 				colunaAtaque = entrada.nextInt();
-				tabuleiro = 1;
+				tabuleiro = 1; // jogador 2 ataca no tabuleiro 1
 				
 				checarAtaque(tabuleiro, linhaAtaque, colunaAtaque);
 				
 				if (checaFimDoJogo(2) == true) {
 					System.out.println("Jogo acabou");
-				}
-				
+					fimDoJogo = true;
+				}	
 			}
-		} while (checaFimDoJogo(1) == false);
-
-}
-
+		} while (fimDoJogo == false);
+	} //end main()
 	
-		public static void checarAtaque(int jogador, int linhaAtaque, int colunaAtaque) {
-			String[][] tabuleiro = new String[10][10];
-
-			tabuleiro = escolherTabuleiro(jogador);
-		
-			if (jogador == 1) {
-				switch (tabuleiro[linhaAtaque][colunaAtaque]) {
-					case "PA": 
-							(barcoPA1).decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-							break;
-							
-						case "EN": 
-							barcoEN1.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-							break;
-							
-						case "SB": 
-							barcoSB1.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-							break;
-							
-						case "DT": 
-							barcoDT1.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-							break;
-							
-						case "BP": 
-							barcoBP1.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-							break;
-							
-						case "--":
-							System.out.println("Você errou!");
-							break;
-				}
-				tabuleiro[linhaAtaque][colunaAtaque] = "--";
-				montarTabuleiro(tabuleiro);
-			}
-			if (jogador == 2) {
-				switch (tabuleiro[linhaAtaque][colunaAtaque]) {
-				case "PA": 
-						barcoPA2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-						break;
-						
-					case "EN": 
-						barcoEN2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-						break;
-						
-					case "SB": 
-						barcoSB2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-						break;
-						
-					case "DT": 
-						barcoDT2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-						break;
-						
-					case "BP": 
-						barcoBP2.decreaseVida(tabuleiro[linhaAtaque][colunaAtaque]);
-						break;
-						
-					case "--":
-						System.out.println("Você errou!");
-						break;
-			}
-			tabuleiro[linhaAtaque][colunaAtaque] = "--";
-			montarTabuleiro(tabuleiro);
-		}	
-			
-		}
-
- public static boolean checaFimDoJogo(int jogador) {
-if (jogador == 1) {
-	 if ((barcoPA2.returnVidaAtual() == 0) && (barcoEN2.returnVidaAtual() == 0)
-			 && (barcoSB2.returnVidaAtual() == 0) && (barcoDT2.returnVidaAtual() == 0) &&
-		 	(barcoBP2.returnVidaAtual() == 0)) 
-			 {
-			 return true;
-			 }
-	 else 
-		 return false;
-}
-if (jogador == 2) {
-	 if ((barcoPA1.returnVidaAtual() == 0) && (barcoEN1.returnVidaAtual() == 0)
-			 && (barcoSB1.returnVidaAtual() == 0) && (barcoDT1.returnVidaAtual() == 0) &&
-		 	(barcoBP1.returnVidaAtual() == 0)) 
-			 {
-			 return true;
-			 }
-	 else
-		 return false;
-
- }
-else 
-	return false;
- }
-
-} //end classe desafio batalha naval
+} //end class
