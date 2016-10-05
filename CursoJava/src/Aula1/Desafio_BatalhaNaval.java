@@ -45,6 +45,9 @@ public class Desafio_BatalhaNaval {
 	static barco barcoSB2 = new barco("SB", 1);
 	static barco barcoDT2 = new barco("DT", 1);
 	static barco barcoBP2 = new barco("BP", 1);
+	static Jogadas jogadasJogador1 = new Jogadas();
+	static Jogadas jogadasJogador2 = new Jogadas();
+	
 	
 		
 	public static String[][] escolherTabuleiro(int jogador) {
@@ -101,7 +104,10 @@ public class Desafio_BatalhaNaval {
 
 		if (direcao.equals("v")) {
 			for (int count = linha; count < (linha + tamanho); count++) {
-				tabuleiro[count][coluna] = peca;
+				if (count > 9)
+					System.out.println("Posição Inválida! Excede o tabuleiro!");
+				else
+					tabuleiro[count][coluna] = peca;
 			}
 			
 			System.out.println("Peça posicionada em: ");
@@ -114,7 +120,10 @@ public class Desafio_BatalhaNaval {
 			
 		else if (direcao.equals("h")) {
 			for (int count = coluna; count < (coluna + tamanho); count++) {
-				tabuleiro[linha][count] = peca;
+				if (count > 9)
+					System.out.println("Posição Inválida! Excede o tabuleiro!");
+				else
+					tabuleiro[linha][count] = peca;
 			}
 			
 			System.out.println("Peça posicionada em: ");
@@ -148,8 +157,8 @@ public class Desafio_BatalhaNaval {
 	}
 	
 	
-	public static boolean checaFimDoJogo(int jogador) {
-		if (jogador == 1) {
+	public static boolean checaFimDoJogo(int tabuleiro) {
+		if (tabuleiro == 2) {
 			 if ((barcoPA2.returnVidaAtual() == 0) && (barcoEN2.returnVidaAtual() == 0)
 				 && (barcoSB2.returnVidaAtual() == 0) && (barcoDT2.returnVidaAtual() == 0) &&
 			 	(barcoBP2.returnVidaAtual() == 0)) {
@@ -158,7 +167,7 @@ public class Desafio_BatalhaNaval {
 			 else 
 				 return false;
 		}
-		if (jogador == 2) {
+		if (tabuleiro == 1) {
 			 if ((barcoPA1.returnVidaAtual() == 0) && (barcoEN1.returnVidaAtual() == 0)
 				 && (barcoSB1.returnVidaAtual() == 0) && (barcoDT1.returnVidaAtual() == 0) &&
 				(barcoBP1.returnVidaAtual() == 0)) {
@@ -256,65 +265,72 @@ public class Desafio_BatalhaNaval {
 
 
 	public static void main(String[] args) {
-		int[] movimentoLinhasJogador1 = new int[10];
-		int[] movimentoColunasJogador1 = new int[10];
-		boolean[] movimentoResultJogador1 = new boolean[10];
+
 		int jogador;
 		boolean fimDoJogo = false;
-		int count1 = 0;
-		
-		
+		boolean acerto = false;
+				
 		jogador = 1;
-		posicionarNavio(jogador, barcoPA1); // Cria um Porta-Aviões para o Jogador 1
-		posicionarNavio(jogador, barcoEN1); // Cria um Porta-Aviões para o Jogador 1
-		posicionarNavio(jogador, barcoSB1); // Cria um Porta-Aviões para o Jogador 1
-		posicionarNavio(jogador, barcoDT1); // Cria um Porta-Aviões para o Jogador 1
-		posicionarNavio(jogador, barcoBP1); // Cria um Porta-Aviões para o Jogador 1
+		posicionarNavio(jogador, barcoPA1); // Cria um <Porta-Aviões> para o Jogador 1
+		posicionarNavio(jogador, barcoEN1); // Cria um <Enconraçado> para o Jogador 1
+		posicionarNavio(jogador, barcoSB1); // Cria um <Submarino> para o Jogador 1
+		posicionarNavio(jogador, barcoDT1); // Cria um <Destroyer> para o Jogador 1
+		posicionarNavio(jogador, barcoBP1); // Cria um <Barco de Patrulha> para o Jogador 1
 		
 		jogador = 2;
-		posicionarNavio(jogador, barcoPA2);
-		posicionarNavio(jogador, barcoEN2);
-		posicionarNavio(jogador, barcoSB2);
-		posicionarNavio(jogador, barcoDT2);
-		posicionarNavio(jogador, barcoBP2);
-		
+		posicionarNavio(jogador, barcoPA2); // Cria um <Porta-Aviões> para o Jogador 2
+		posicionarNavio(jogador, barcoEN2); // Cria um <Enconraçado> para o Jogador 2
+		posicionarNavio(jogador, barcoSB2); // Cria um <Submarino> para o Jogador 2
+		posicionarNavio(jogador, barcoDT2); // Cria um <Destroyer> para o Jogador 2
+		posicionarNavio(jogador, barcoBP2); // Cria um <Barco de Patrulha> para o Jogador 2
 		
 		do {
-			System.out.println("Jogador 1, entre com a linha e coluna de ataque:");
-			System.out.println("linhaAtaque: ");
-			int linhaAtaque = entrada.nextInt();	
-			movimentoLinhasJogador1[count1] = linhaAtaque;
-			System.out.println("linhaAtaque: ");
-			int colunaAtaque = entrada.nextInt();
-			movimentoColunasJogador1[count1] = colunaAtaque;
 			
-			int tabuleiro = 2; // jogador 1 ataca no tabuleiro 2
+			acerto = guerrear(1,2); // jogador 1 atacando tabuleiro 2
 			
-			movimentoResultJogador1[count1] = checarAtaque(tabuleiro, linhaAtaque, colunaAtaque);
-			count1++;
-			
-			if (checaFimDoJogo(1) == true) {
-				System.out.println("Jogo acabou");
-				fimDoJogo = true;
-				for (int i = 0; i < 10 ; i++)
-					System.out.println("Movimentos: " + movimentoLinhasJogador1[i] + movimentoColunasJogador1[i] + movimentoResultJogador1[i]);
-			}		
-			else {	
-				System.out.println("Jogador 2, entre com a linha e coluna de ataque:");
-				System.out.println("linhaAtaque: ");
-				linhaAtaque = entrada.nextInt();	
-				System.out.println("linhaAtaque: ");
-				colunaAtaque = entrada.nextInt();
-				tabuleiro = 1; // jogador 2 ataca no tabuleiro 1
-				
-				checarAtaque(tabuleiro, linhaAtaque, colunaAtaque);
-				
-				if (checaFimDoJogo(2) == true) {
+			if (acerto == true){
+				if (checaFimDoJogo(2) == true) { // tabuleiro
 					System.out.println("Jogo acabou");
-					fimDoJogo = true;
-				}	
+					jogadasJogador1.imprimeJogadas();
+					break;
+				}		
 			}
+		
+			acerto = guerrear(2,1);
+				
+			if (acerto == true){
+				if (checaFimDoJogo(1) == true) { // tabuleiro
+					System.out.println("Jogo acabou");
+					jogadasJogador2.imprimeJogadas();
+					break;
+				}		
+			}	
+
 		} while (fimDoJogo == false);
 	} //end main()
+
+
+
+	public static boolean guerrear(int jogador, int tabuleiro){
+		boolean sucesso;
+					
+		System.out.println("Jogador " + jogador + ", entre com a linha e coluna de ataque:");
+		System.out.println("linhaAtaque: ");
+		int linhaAtaque = entrada.nextInt();	
+		System.out.println("colunaAtaque: ");
+		int colunaAtaque = entrada.nextInt();
+		
+		sucesso = checarAtaque(tabuleiro, linhaAtaque, colunaAtaque);
+		
+		if (jogador == 1) 
+			jogadasJogador1.armazenaJogadas(linhaAtaque, colunaAtaque, sucesso);
+		if (jogador == 2) 			
+			jogadasJogador2.armazenaJogadas(linhaAtaque, colunaAtaque, sucesso);
+		
+		return sucesso;
+	}
 	
+
+
+
 } //end class
